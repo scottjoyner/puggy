@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cd /kipnerter/puggy/
 git pull
 cp /kipnerter/puggy/docs/* /var/www/html
