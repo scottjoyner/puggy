@@ -1,0 +1,45 @@
+doctype html
+html(lang="en")
+
+	//- Variables to set active page in sidebar
+	block variables
+		- var activePage = 'dashboard';
+		- var activeGroup = 'none';
+
+	head
+		meta(name="description", content="Vali is a responsive and free admin theme built with Bootstrap 5, SASS and PUG.js. It's fully customizable and modular.")
+
+		// Twitter meta
+		meta(property="twitter:card", content="summary_large_image")
+		meta(property="twitter:site", content="@kipnerter")
+		meta(property="twitter:creator", content="@kipnerter")
+
+		// Open Graph Meta
+		meta(property="og:type", content="website")
+		meta(property="og:site_name", content="Kipnerter")
+		meta(property="og:title", content="Kipnerter - Scott Joyner")
+		meta(property='og:url', content='http://scottjonyer.dev')
+		meta(property='og:image', content='')
+		meta(property="og:description", content="My Shit")
+
+		block title
+			title ScottJoyner.dev 
+
+		include ../includes/_head.pug
+
+	body.app.sidebar-mini
+
+		// Navbar
+		include ../includes/_header.pug
+
+		// Sidebar menu
+		include ../includes/_sidebar.pug
+
+		main.app-content
+			block content
+
+		//- Javascripts
+		include ../includes/_javascript.pug
+		
+		// Page specific javascripts
+		block specific-js
