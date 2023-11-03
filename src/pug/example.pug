@@ -1,0 +1,32 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  title Run Cypher Query
+  script.
+    function runQuery() {
+    // The Cypher query to be executed
+    var query = document.getElementById('cypher-query').value;
+    // The endpoint of your Flask API
+    var apiUrl = 'http://localhost:5000/run-cypher';
+    // Prepare the POST request
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', apiUrl, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+    // Handle the response from the server
+    var response = JSON.parse(xhr.responseText);
+    document.getElementById('result').textContent = JSON.stringify(response, null, 2);
+    }
+    };
+    // Send the Cypher query as JSON
+    var data = JSON.stringify({query: query});
+    xhr.send(data);
+    }
+
+h1 Run Cypher Query
+textarea#cypher-query(rows='4' cols='50') MATCH (n) RETURN n LIMIT 10
+br
+button(onclick='runQuery()') Run Query
+pre#result.
+  

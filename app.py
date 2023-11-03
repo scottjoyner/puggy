@@ -1,10 +1,16 @@
 from flask import Flask, request, jsonify
 from neo4j import GraphDatabase
+from flask_cors import CORS
+
+import configparser
 
 app = Flask(__name__)
+CORS(app) # This will enable CORS for all routes
+
+config = configparser.ConfigParser()
 
 # Neo4j connection details (Update with your details)
-uri = "bolt://localhost:7687"
+uri = "neo4j+s://787da88b.databases.neo4j.io:7687"
 user = "neo4j"
 password = "password"
 driver = GraphDatabase.driver(uri, auth=(user, password))
@@ -16,7 +22,7 @@ def run_cypher():
         # Parse the incoming data to get the Cypher query
         data = request.get_json()
         query = data['query']
-
+        print(query)
         # Function to execute the query
         def execute_query(tx, q):
             result = tx.run(q)
