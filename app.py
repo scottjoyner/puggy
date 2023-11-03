@@ -8,11 +8,12 @@ app = Flask(__name__)
 CORS(app) # This will enable CORS for all routes
 
 config = configparser.ConfigParser()
+config.read('puggy.ini')
 
 # Neo4j connection details (Update with your details)
-uri = "neo4j+s://787da88b.databases.neo4j.io:7687"
-user = "neo4j"
-password = "password"
+uri = config['neo4j']['uri']
+user = config['neo4j']['username']
+password = config['neo4j']['pwd']
 driver = GraphDatabase.driver(uri, auth=(user, password))
 
 # Define the route to accept POST requests with the Cypher query
