@@ -19,15 +19,15 @@
         <h1>Developer Login</h1>
       </div>
       <div class="login-box">
-        <form class="login-form" action="index.html">
+        <form class="login-form" id="loginForm">
           <h3 class="login-head"><i class="bi bi-person me-2"></i>SIGN IN</h3>
           <div class="mb-3">
             <label class="form-label">USERNAME</label>
-            <input class="form-control" type="text" placeholder="Email" autofocus>
+            <input class="form-control" id="loginUsername" type="text" placeholder="Email" autofocus>
           </div>
           <div class="mb-3">
             <label class="form-label">PASSWORD</label>
-            <input class="form-control" type="password" placeholder="Password">
+            <input class="form-control" id="loginPassword" type="password" placeholder="Password">
           </div>
           <div class="mb-3">
             <div class="utility">
@@ -39,11 +39,14 @@
               <p class="semibold-text mb-2"><a href="#" data-toggle="flip">Forgot Password ?</a></p>
             </div>
           </div>
+          <div class="mb-3">
+            <p class="semibold-text mb-2"><a href="page-signup.html">Need an Account ?</a></p>
+          </div>
           <div class="mb-3 btn-container d-grid">
             <button class="btn btn-primary btn-block"><i class="bi bi-box-arrow-in-right me-2 fs-5"></i>SIGN IN</button>
           </div>
         </form>
-        <form class="forget-form" action="index.html">
+        <form class="forget-form">
           <h3 class="login-head"><i class="bi bi-person-lock me-2"></i>Forgot Password ?</h3>
           <div class="mb-3">
             <label class="form-label">EMAIL</label>
@@ -66,7 +69,6 @@
       // Login Page Flipbox control
       $('.login-content [data-toggle="flip"]').click(function() {
       	$('.login-box').toggleClass('flipped');
-      	console.log(document.getElementById(""))
       	return false;
       });
     </script>

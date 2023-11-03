@@ -12,17 +12,17 @@ html
 			.logo: h1 Developer Login
 
 			.login-box
-				form.login-form(action="index.html")
+				form#loginForm.login-form
 					h3.login-head
 						i.bi.bi-person.me-2
 						| SIGN IN
 					.mb-3
 						label.form-label USERNAME
-						input.form-control(type="text", placeholder="Email", autofocus)
+						input#loginUsername.form-control(type="text", placeholder="Email", autofocus)
 
 					.mb-3
 						label.form-label PASSWORD
-						input.form-control(type="password", placeholder="Password")
+						input#loginPassword.form-control(type="password", placeholder="Password")
 
 					.mb-3
 						.utility
@@ -32,13 +32,16 @@ html
 									span.label-text Stay Signed in
 							p.semibold-text.mb-2
 								a(href="#" data-toggle="flip") Forgot Password ?
+					.mb-3
+							p.semibold-text.mb-2
+								a(href="page-signup.html") Need an Account ?
 
 					.mb-3.btn-container.d-grid
 						button.btn.btn-primary.btn-block
 							i.bi.bi-box-arrow-in-right.me-2.fs-5
 							| SIGN IN
 
-				form.forget-form(action="index.html")
+				form.forget-form
 					h3.login-head
 						i.bi.bi-person-lock.me-2
 						| Forgot Password ?
@@ -50,10 +53,10 @@ html
 						button.btn.btn-primary.btn-block
 							i.bi.bi-unlock.me-2.fs-5
 							| RESET
-
 					.mb-3.mt-3
 						p.semibold-text.mb-0
 							a(href="page-login.html" data-toggle="flip") <i class="bi bi-chevron-left me-1"></i> Back to Login
+
 
 		include includes/_javascript.pug
 
@@ -61,6 +64,5 @@ html
 			// Login Page Flipbox control
 			$('.login-content [data-toggle="flip"]').click(function() {
 				$('.login-box').toggleClass('flipped');
-				console.log(document.getElementById(""))
 				return false;
 			});
