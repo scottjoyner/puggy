@@ -1,0 +1,77 @@
+doctype html
+html
+	head
+		include includes/_head.pug
+		title Login - ScottJoyner.dev
+
+	body
+		section.material-half-bg
+			.cover
+
+		section.login-content
+			.logo: h1 Developer Login
+
+			.login-box
+				form#loginForm.login-form
+					h3.login-head
+						i.bi.bi-person.me-2
+						|  SIGN IN
+					.mb-3
+						label.form-label(for='loginUsername') USERNAME
+						input#loginUsername.form-control(type='text' placeholder='Email' autofocus='')
+					.mb-3
+						label.form-label(for='loginPassword') PASSWORD
+						input#loginPassword.form-control(type='password' placeholder='Password')
+					.mb-3.utility
+						.form-check
+						input#staySignedIn.form-check-input(type='checkbox')
+						label.form-check-label(for='staySignedIn') Stay Signed in
+					.mb-3.btn-container.d-grid
+						button#signInBtn.btn.btn-primary.btn-block(type='button')
+						i.bi.bi-box-arrow-in-right.me-2.fs-5
+						|  SIGN IN
+					form#signupForm.signup-form(style='display:none;')
+				
+
+		script(type="text/javascript").
+			//- // Login Page Flipbox control
+			//- $('.login-content [data-toggle="flip"]').click(function() {
+			//- 	$('.login-box').toggleClass('flipped');
+			//- 	console.log(document.getElementById(""))
+			//- 	return false;
+			//- });
+			document.addEventListener('DOMContentLoaded', function() {
+				const signInBtn = document.getElementById('signInBtn');
+				// Add similar button for sign-up
+
+				signInBtn.addEventListener('click', function() {
+					const username = document.getElementById('loginUsername').value;
+					const password = document.getElementById('loginPassword').value;
+
+					// AJAX request to Flask API for sign-in
+					fetch('/api/login', {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({ username, password })
+					})
+					.then(response => response.json())
+					.then(data => {
+						// Handle response
+						if (data.success) {
+							// Redirect to dashboard or some other page
+							window.location.href = '/dashboard';
+						} else {
+							// Show error message
+							alert(data.message);
+						}
+					})
+					.catch(error => {
+						console.error('Error:', error);
+					});
+				});
+
+				// Add event listener and AJAX request for sign-up button as well
+			});
+

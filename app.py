@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from neo4j import GraphDatabase
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
@@ -8,6 +9,38 @@ uri = "bolt://localhost:7687"
 user = "neo4j"
 password = "password"
 driver = GraphDatabase.driver(uri, auth=(user, password))
+
+
+# This is a simple example, replace with your database setup
+users = {}
+
+@app.route('/api/signup', methods=['POST'])
+def signup():
+    data = request.json
+    username = data['username']
+    password = data['password']
+
+    if username in users:
+        return jsonify({'success': False, 'message': 'Username already exists'}), 400
+
+    hashed_password = generate_password_hash(password)
+    users[username] = hashed_password
+    return jsonify({'success': True, 'message': 'User created successfully'}), 201
+
+@app.route('/api/login', methods=['POST'])
+def login():
+    data = request.json
+    username = data['username']
+    password = data['password']
+
+    hashed_password = users.get(username)
+
+    if hashed_password and check_password_hash(hashed_password, password):
+        return jsonify({'success': True, 'message': 'Login successful'}), 200
+    else:
+        return jsonify({'success': False, 'message': 'Invalid credentials'}), 401
+
+
 
 # Define the route to accept POST requests with the Cypher query
 @app.route('/run-cypher', methods=['POST'])
