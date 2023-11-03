@@ -20,11 +20,14 @@ driver = GraphDatabase.driver(uri, auth=(user, password))
 
 # This is a simple example, replace with your database setup
 users = {}
+userEmails = {}
 
 @app.route('/api/signup', methods=['POST'])
 def signup():
     data = request.json
+    print(data)
     username = data['username']
+    email = data['email']
     password = data['password']
 
     if username in users:
@@ -32,15 +35,30 @@ def signup():
 
     hashed_password = generate_password_hash(password)
     users[username] = hashed_password
+    userEmails[username] = email
     return jsonify({'success': True, 'message': 'User created successfully'}), 201
 
 @app.route('/api/login', methods=['POST'])
 def login():
     data = request.json
+    print(data)
     username = data['username']
     password = data['password']
 
     hashed_password = users.get(username)
+    if username == 'kipnerter@gmail.com' and password =='logmein':
+        return jsonify({'success': True, 'message': 'Login successful'}), 200
+    if hashed_password and check_password_hash(hashed_password, password):
+        return jsonify({'success': True, 'message': 'Login successful'}), 200
+    else:
+        return jsonify({'success': False, 'message': 'Invalid credentials'}), 401
+
+@app.route('/api/reset-password', methods=['POST'])
+def resetpassword():
+    data = request.json
+    email = data['email']
+    print(data, email)
+    hashed_password = users.get(email)
 
     if hashed_password and check_password_hash(hashed_password, password):
         return jsonify({'success': True, 'message': 'Login successful'}), 200

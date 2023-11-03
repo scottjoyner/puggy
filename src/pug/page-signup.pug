@@ -31,20 +31,15 @@ html
 							p.semibold-text.mb-2
 								a(href="page-login.html") Trying to Login ?
 					.mb-3.btn-container.d-grid
-						button.btn.btn-primary.btn-block
+						button#signUpBtn.btn.btn-primary.btn-block
 							i.bi.bi-box-arrow-in-right.me-2.fs-5
 							| SIGN UP
 
 		include includes/_javascript.pug
 
 		script(type="text/javascript").
-			// Login Page Flipbox control
-			$('.login-content [data-toggle="flip"]').click(function() {
-				$('.login-box').toggleClass('flipped');
-				return false;
-			});
 			document.addEventListener('DOMContentLoaded', function() {
-				const signInBtn = document.getElementById('signInBtn');
+				const signInBtn = document.getElementById('signUpBtn');
 				// Add similar button for sign-up
 
 				signInBtn.addEventListener('click', function() {
@@ -53,12 +48,12 @@ html
 					const password = document.getElementById('signupPassword').value;
 
 					// AJAX request to Flask API for sign-in
-					fetch('/api/login', {
+					fetch('/api/signup', {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json'
 						},
-						body: JSON.stringify({ username, password })
+						body: JSON.stringify({ email, username, password })
 					})
 					.then(response => response.json())
 					.then(data => {

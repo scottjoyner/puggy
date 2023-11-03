@@ -39,7 +39,7 @@
             </div>
           </div>
           <div class="mb-3 btn-container d-grid">
-            <button class="btn btn-primary btn-block"><i class="bi bi-box-arrow-in-right me-2 fs-5"></i>SIGN UP</button>
+            <button class="btn btn-primary btn-block" id="signUpBtn"><i class="bi bi-box-arrow-in-right me-2 fs-5"></i>SIGN UP</button>
           </div>
         </form>
       </div>
@@ -49,13 +49,8 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
     <script type="text/javascript">
-      // Login Page Flipbox control
-      $('.login-content [data-toggle="flip"]').click(function() {
-      	$('.login-box').toggleClass('flipped');
-      	return false;
-      });
       document.addEventListener('DOMContentLoaded', function() {
-      	const signInBtn = document.getElementById('signInBtn');
+      	const signInBtn = document.getElementById('signUpBtn');
       	// Add similar button for sign-up
       
       	signInBtn.addEventListener('click', function() {
@@ -64,12 +59,12 @@
       		const password = document.getElementById('signupPassword').value;
       
       		// AJAX request to Flask API for sign-in
-      		fetch('/api/login', {
+      		fetch('/api/signup', {
       			method: 'POST',
       			headers: {
       				'Content-Type': 'application/json'
       			},
-      			body: JSON.stringify({ username, password })
+      			body: JSON.stringify({ email, username, password })
       		})
       		.then(response => response.json())
       		.then(data => {
