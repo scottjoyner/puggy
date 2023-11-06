@@ -24,8 +24,3 @@ Please take a look at [contributing guidelines](CONTRIBUTING.md) if you are cons
 ## Contributors
 
 * **[Scott Joyner](http://scottjoyner.dev)** - *Project Author*
-
-
-## License
-
-This project is licensed under the [MIT](LICENSE) License
