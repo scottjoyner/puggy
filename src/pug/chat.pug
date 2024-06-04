@@ -1,0 +1,91 @@
+extends layouts/_layout.pug
+
+block variables
+    - var activePage = 'primary-chat-page';
+    - var activeGroup = 'agents';
+    - var myprofile = "https://avatars.githubusercontent.com/u/47367649?v=4";
+
+block title
+    title LLama3 Chatter
+
+block content
+    .app-title
+        div
+            h1
+                i.bi.bi-speedometer
+                |  Basic LLM
+            p Chat with llama3 here
+
+        ul.app-breadcrumb.breadcrumb
+            li.breadcrumb-item
+                i.bi.bi-house-door.fs-6
+            li.breadcrumb-item
+                a(href='#') Blank Page
+
+    .row
+        .col-md-12(data-myprofile=myprofile)
+            .tile
+                h3.tile-title Chat
+                .messanger
+                    .messages
+                        .message
+                            img(src="https://randomuser.me/api/portraits/men/4.jpg")
+                            p.info Hello there!
+                                br
+                                | Good Morning
+
+                        .message.me
+                            img(src=myprofile)
+                            p.info Hi
+                                br
+                                | Good Morning
+
+                        .message
+                            img(src=myprofile)
+                            p.info How are you?
+
+                        .message.me
+                            img(src=myprofile)
+                            p.info I'm Fine.
+
+                    .sender
+                        input#messageInput(type="text",placeholder="Send Message")
+                        button#sendButton.btn.btn-primary(type="button")
+                            i.bi.bi-send.fs-5
+
+block specific-js
+    script.
+        document.addEventListener('DOMContentLoaded', function () {
+            const sendButton = document.getElementById('sendButton');
+            const messageInput = document.getElementById('messageInput');
+            const messages = document.querySelector('.messages');
+            const myprofile = document.querySelector('.col-md-12').dataset.myprofile;
+
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            function sendMessage() {
+                const messageText = messageInput.value.trim();
+                if (messageText !== '') {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message', 'me');
+
+                    const imgElement = document.createElement('img');
+                    imgElement.src = myprofile;
+                    messageElement.appendChild(imgElement);
+
+                    const pElement = document.createElement('p');
+                    pElement.classList.add('info');
+                    pElement.textContent = messageText;
+                    messageElement.appendChild(pElement);
+
+                    messages.appendChild(messageElement);
+                    messageInput.value = '';
+                    messages.scrollTop = messages.scrollHeight;
+                }
+            }
+        });
