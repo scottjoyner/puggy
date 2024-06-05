@@ -13,7 +13,7 @@
     <meta property="og:url" content="http://scottjonyer.dev">
     <meta property="og:image" content="">
     <meta property="og:description" content="My Shit">
-    <title>LLama3 Chatter</title>
+    <title>SCJ</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -124,6 +124,7 @@
           </ul>
         </li>
         <li><a class="app-menu__item" href="docs.html"><i class="app-menu__icon bi bi-code-square"></i><span class="app-menu__label">Docs</span></a></li>
+        <li><a class="app-menu__item active" href="chat.html"><i class="app-menu__icon bi bi-code-square"></i><span class="app-menu__label">Chat</span></a></li>
       </ul>
     </aside>
     <main class="app-content">
@@ -143,22 +144,12 @@
             <h3 class="tile-title">Chat</h3>
             <div class="messanger">
               <div class="messages">
-                <div class="message"><img src="https://randomuser.me/api/portraits/men/4.jpg">
-                  <p class="info">Hello there!<br>Good Morning</p>
-                </div>
-                <div class="message me"><img src="https://avatars.githubusercontent.com/u/47367649?v=4">
-                  <p class="info">Hi<br>Good Morning</p>
-                </div>
-                <div class="message"><img src="https://avatars.githubusercontent.com/u/47367649?v=4">
-                  <p class="info">How are you?</p>
-                </div>
-                <div class="message me"><img src="https://avatars.githubusercontent.com/u/47367649?v=4">
-                  <p class="info">I'm Fine.</p>
-                </div>
+                <div class="message"></div>
               </div>
               <div class="sender">
                 <input id="messageInput" type="text" placeholder="Send Message">
                 <button class="btn btn-primary" id="sendButton" type="button"><i class="bi bi-send fs-5"></i></button>
+                <button class="btn btn-secondary" id="recordButton" type="button"><i class="bi bi-mic fs-5"></i></button>
               </div>
             </div>
           </div>
@@ -176,6 +167,7 @@
           const messageInput = document.getElementById('messageInput');
           const messages = document.querySelector('.messages');
           const myprofile = document.querySelector('.col-md-12').dataset.myprofile;
+          const BASE_URL = "http://127.0.0.1:5001";
       
           sendButton.addEventListener('click', sendMessage);
           messageInput.addEventListener('keypress', function (e) {
@@ -187,22 +179,83 @@
           function sendMessage() {
               const messageText = messageInput.value.trim();
               if (messageText !== '') {
-                  const messageElement = document.createElement('div');
-                  messageElement.classList.add('message', 'me');
-      
-                  const imgElement = document.createElement('img');
-                  imgElement.src = myprofile;
-                  messageElement.appendChild(imgElement);
-      
-                  const pElement = document.createElement('p');
-                  pElement.classList.add('info');
-                  pElement.textContent = messageText;
-                  messageElement.appendChild(pElement);
-      
-                  messages.appendChild(messageElement);
+                  addMessageToChat(myprofile, messageText, 'me');
                   messageInput.value = '';
                   messages.scrollTop = messages.scrollHeight;
+      
+                  try {
+                      fetch(`/llama3-2/chat`, {
+                          method: 'POST',
+                          headers: {
+                              'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({ question: messageText }),
+                      })
+                      .then(response => response.json())
+                      .then(data => {
+                          console.log(data);
+                          addMessageToChat("https://randomuser.me/api/portraits/men/4.jpg", data.full_content, 'llama3');
+                      })
+                      .catch(error => {
+                          console.error('Error:', error);
+                      });
+                      
+                      //- .then()
+                      //- ;
+                      //- console.log(response)
+                      //- addMessageToChat("https://randomuser.me/api/portraits/men/4.jpg", response, '')
+                      //- const reader = response.body.getReader();
+                      //- const decoder = new TextDecoder('utf-8');
+                      //- let messageElement = addMessageToChat("https://randomuser.me/api/portraits/men/4.jpg", '', '');
+                      //- let fullContent = '';
+                      //- while (true) {
+                      //-     const { value, done } = await reader.read();
+                      //-     if (done) {
+                      //-         break;
+                      //-     }
+                      //-     const chunk = decoder.decode(value);
+                      //-     const jsonLines = chunk.split('\n').filter(line => line.trim() !== '');
+                      //-     for (const line of jsonLines) {
+                      //-         const jsonData = JSON.parse(line);
+                      //-         if (jsonData.content !== undefined) {
+                      //-             fullContent += jsonData.content;
+                      //-             updateMessageContent(messageElement, fullContent);
+                      //-         }
+                      //-         if (jsonData.done) {
+                      //-             updateMessageContent(messageElement, fullContent);
+                      //-             break;
+                      //-         }
+                      //-     }
+                      //- }
+                  } catch (error) {
+                      console.error('Error:', error);
+                  }
               }
+          }
+      
+          function addMessageToChat(profile, text, senderClass) {
+              const messageElement = document.createElement('div');
+              messageElement.classList.add('message', senderClass);
+      
+              const imgElement = document.createElement('img');
+              imgElement.src = profile;
+              messageElement.appendChild(imgElement);
+      
+              const pElement = document.createElement('p');
+              pElement.classList.add('info');
+              pElement.textContent = text;
+              messageElement.appendChild(pElement);
+      
+              messages.appendChild(messageElement);
+              messages.scrollTop = messages.scrollHeight;
+      
+              return messageElement;
+          }
+      
+          function updateMessageContent(messageElement, text) {
+              const pElement = messageElement.querySelector('p.info');
+              pElement.textContent = text;
+              messages.scrollTop = messages.scrollHeight;
           }
       });
     </script>

@@ -4,9 +4,10 @@ block variables
     - var activePage = 'primary-chat-page';
     - var activeGroup = 'agents';
     - var myprofile = "https://avatars.githubusercontent.com/u/47367649?v=4";
+    - var BASE_URL = "http://127.0.0.1:5001";
 
 block title
-    title LLama3 Chatter
+    title SCJ
 
 block content
     .app-title
@@ -29,29 +30,14 @@ block content
                 .messanger
                     .messages
                         .message
-                            img(src="https://randomuser.me/api/portraits/men/4.jpg")
-                            p.info Hello there!
-                                br
-                                | Good Morning
-
-                        .message.me
-                            img(src=myprofile)
-                            p.info Hi
-                                br
-                                | Good Morning
-
-                        .message
-                            img(src=myprofile)
-                            p.info How are you?
-
-                        .message.me
-                            img(src=myprofile)
-                            p.info I'm Fine.
 
                     .sender
                         input#messageInput(type="text",placeholder="Send Message")
                         button#sendButton.btn.btn-primary(type="button")
                             i.bi.bi-send.fs-5
+
+                        button#recordButton.btn.btn-secondary(type="button")
+                            i.bi.bi-mic.fs-5
 
 block specific-js
     script.
@@ -60,6 +46,7 @@ block specific-js
             const messageInput = document.getElementById('messageInput');
             const messages = document.querySelector('.messages');
             const myprofile = document.querySelector('.col-md-12').dataset.myprofile;
+            const BASE_URL = "http://127.0.0.1:5001";
 
             sendButton.addEventListener('click', sendMessage);
             messageInput.addEventListener('keypress', function (e) {
@@ -71,21 +58,82 @@ block specific-js
             function sendMessage() {
                 const messageText = messageInput.value.trim();
                 if (messageText !== '') {
-                    const messageElement = document.createElement('div');
-                    messageElement.classList.add('message', 'me');
-
-                    const imgElement = document.createElement('img');
-                    imgElement.src = myprofile;
-                    messageElement.appendChild(imgElement);
-
-                    const pElement = document.createElement('p');
-                    pElement.classList.add('info');
-                    pElement.textContent = messageText;
-                    messageElement.appendChild(pElement);
-
-                    messages.appendChild(messageElement);
+                    addMessageToChat(myprofile, messageText, 'me');
                     messageInput.value = '';
                     messages.scrollTop = messages.scrollHeight;
+
+                    try {
+                        fetch(`/llama3-2/chat`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ question: messageText }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            addMessageToChat("https://randomuser.me/api/portraits/men/4.jpg", data.full_content, 'llama3');
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                        
+                        //- .then()
+                        //- ;
+                        //- console.log(response)
+                        //- addMessageToChat("https://randomuser.me/api/portraits/men/4.jpg", response, '')
+                        //- const reader = response.body.getReader();
+                        //- const decoder = new TextDecoder('utf-8');
+                        //- let messageElement = addMessageToChat("https://randomuser.me/api/portraits/men/4.jpg", '', '');
+                        //- let fullContent = '';
+                        //- while (true) {
+                        //-     const { value, done } = await reader.read();
+                        //-     if (done) {
+                        //-         break;
+                        //-     }
+                        //-     const chunk = decoder.decode(value);
+                        //-     const jsonLines = chunk.split('\n').filter(line => line.trim() !== '');
+                        //-     for (const line of jsonLines) {
+                        //-         const jsonData = JSON.parse(line);
+                        //-         if (jsonData.content !== undefined) {
+                        //-             fullContent += jsonData.content;
+                        //-             updateMessageContent(messageElement, fullContent);
+                        //-         }
+                        //-         if (jsonData.done) {
+                        //-             updateMessageContent(messageElement, fullContent);
+                        //-             break;
+                        //-         }
+                        //-     }
+                        //- }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
                 }
+            }
+
+            function addMessageToChat(profile, text, senderClass) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', senderClass);
+
+                const imgElement = document.createElement('img');
+                imgElement.src = profile;
+                messageElement.appendChild(imgElement);
+
+                const pElement = document.createElement('p');
+                pElement.classList.add('info');
+                pElement.textContent = text;
+                messageElement.appendChild(pElement);
+
+                messages.appendChild(messageElement);
+                messages.scrollTop = messages.scrollHeight;
+
+                return messageElement;
+            }
+
+            function updateMessageContent(messageElement, text) {
+                const pElement = messageElement.querySelector('p.info');
+                pElement.textContent = text;
+                messages.scrollTop = messages.scrollHeight;
             }
         });
