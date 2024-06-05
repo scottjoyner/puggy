@@ -150,6 +150,7 @@
                 <input id="messageInput" type="text" placeholder="Send Message">
                 <button class="btn btn-primary" id="sendButton" type="button"><i class="bi bi-send fs-5"></i></button>
                 <button class="btn btn-secondary" id="recordButton" type="button"><i class="bi bi-mic fs-5"></i></button>
+                <button class="btn btn-info" id="recordButton" type="button"><i class="bi bi-broadcast-pin fs-5"></i></button>
               </div>
             </div>
           </div>
@@ -257,6 +258,12 @@
               pElement.textContent = text;
               messages.scrollTop = messages.scrollHeight;
           }
+          var recordButton = document.getElementById('recordButton'); 
+          recordButton.addEventListener('click', function() { 
+              this.classList.toggle('btn-secondary'); 
+              this.classList.toggle('btn-danger'); 
+          });
+      
       });
     </script>
   </body>

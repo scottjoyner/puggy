@@ -38,6 +38,9 @@ block content
 
                         button#recordButton.btn.btn-secondary(type="button")
                             i.bi.bi-mic.fs-5
+                            
+                        button#recordButton.btn.btn-info(type="button")
+                            i.bi.bi-broadcast-pin.fs-5
 
 block specific-js
     script.
@@ -136,4 +139,10 @@ block specific-js
                 pElement.textContent = text;
                 messages.scrollTop = messages.scrollHeight;
             }
+            var recordButton = document.getElementById('recordButton'); 
+            recordButton.addEventListener('click', function() { 
+                this.classList.toggle('btn-secondary'); 
+                this.classList.toggle('btn-danger'); 
+            });
+
         });
