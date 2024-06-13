@@ -57,7 +57,7 @@
       		const password = document.getElementById('loginPassword').value;
       
       		// AJAX request to Flask API for sign-in
-      		fetch('/api/login', {
+      		fetch(`${baseurl}/api/login`, {
       			method: 'POST',
       			headers: {
       				'Content-Type': 'application/json'
@@ -69,7 +69,7 @@
       			// Handle response
       			if (data.success) {
       				// Redirect to dashboard or some other page
-      				window.location.href = '/dashboard';
+      				window.location.href = '/dashboard.html';
       			} else {
       				// Show error message
       				alert(data.message);

@@ -65,6 +65,7 @@
     <script src="js/jquery-3.7.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/login.js"></script>
     <script type="text/javascript">
       // Login Page Flipbox control
       $('.login-content [data-toggle="flip"]').click(function() {
@@ -80,7 +81,7 @@
       		const password = document.getElementById('loginPassword').value;
       
       		// AJAX request to Flask API for sign-in
-      		fetch('http://127.0.0.1:5000/api/login', {
+      		fetch(`http://127.0.0.1:5000/api/login`, {
       			method: 'POST',
       			headers: {
       				'Content-Type': 'application/json'

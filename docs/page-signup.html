@@ -48,6 +48,7 @@
     <script src="js/jquery-3.7.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/login.js"></script>
     <script type="text/javascript">
       document.addEventListener('DOMContentLoaded', function() {
       	const signInBtn = document.getElementById('signUpBtn');
@@ -59,7 +60,7 @@
       		const password = document.getElementById('signupPassword').value;
       
       		// AJAX request to Flask API for sign-in
-      		fetch('/api/signup', {
+      		fetch('http://127.0.0.1:5000/api/signup', {
       			method: 'POST',
       			headers: {
       				'Content-Type': 'application/json'

@@ -24,6 +24,9 @@ module.exports = function (grunt) {
 				options: {
 					pretty: true
 				},
+				data: {
+					baseurl: "http://localhost:5000"
+				},
 				files: [{
 					src: ['**/*.pug', '!**/_*.pug'],
 					dest: "docs/",

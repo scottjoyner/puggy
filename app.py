@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from neo4j import GraphDatabase
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_cors import CORS
@@ -15,12 +15,20 @@ config.read('puggy.ini')
 uri = config['neo4j']['uri']
 user = config['neo4j']['username']
 password = config['neo4j']['pwd']
+
 driver = GraphDatabase.driver(uri, auth=(user, password))
 
 
 # This is a simple example, replace with your database setup
 users = {}
 userEmails = {}
+
+@app.route('/<path:filename>')
+def serve_file(filename):
+    dir = "/Users/scottjoyner/git/puggy/docs"
+    return send_from_directory(dir, filename)
+
+
 
 @app.route('/api/signup', methods=['POST'])
 def signup():
